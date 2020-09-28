@@ -44,6 +44,9 @@ if nargin < 3
   doPlot = false;
 end
 driftEvents = [];
+if isempty(spikeTimes)
+  return % null input ==> nothing to do
+end
 
 D = 2; % um
 bins = min(spikeDepths)-D:D:max(spikeDepths)+D;
@@ -52,7 +55,11 @@ h = histc(spikeDepths, bins);
 h = h(1:end-1); % last bin represents the scalar value bins(end), not an interval
 bins = bins(1:end - 1) + D/2; % now it's the centre of each interval
 
-[~, locs] = findpeaks(h);
+if numel(h) < 3
+  locs = []; % findpeaks needs an input with >=3 values
+else
+  [~, locs] = findpeaks(h);
+end
 
 if doPlot
   ax(1) = subplot(1, 5, 1); hold on;
