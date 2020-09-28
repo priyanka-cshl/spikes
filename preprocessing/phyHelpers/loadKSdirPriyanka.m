@@ -1,6 +1,6 @@
 
 
-function spikeStruct = loadKSdir(ksDir, varargin)
+function spikeStruct = loadKSdirPriyanka(ksDir, varargin)
 
 if ~isempty(varargin)
     params = varargin{1};
@@ -47,7 +47,7 @@ if exist(fullfile(ksDir, 'cluster_group.tsv'))
    cgsFile = fullfile(ksDir, 'cluster_group.tsv');
 end 
 if ~isempty(cgsFile)
-    [cids, cgs] = readClusterGroupsCSV(cgsFile);
+    [cids, cgs, wires] = readClusterGroupsCSVPriyanka(cgsFile);
 
     if params.excludeNoise
         noiseClusters = cids(cgs==0);
@@ -64,7 +64,8 @@ if ~isempty(cgsFile)
         clu = clu(~ismember(clu, noiseClusters));
         cgs = cgs(~ismember(cids, noiseClusters));
         cids = cids(~ismember(cids, noiseClusters));
-        
+        [~,channels] = ismember(cids, wires(:,1));
+        channels = wires(channels,2);
         
     end
     
@@ -73,6 +74,7 @@ else
     
     cids = unique(spikeTemplates);
     cgs = 3*ones(size(cids));
+    channels = [];
 end
     
 
@@ -82,12 +84,14 @@ temps = readNPY(fullfile(ksDir, 'templates.npy'));
 
 winv = readNPY(fullfile(ksDir, 'whitening_mat_inv.npy'));
 
+
 spikeStruct.st = st;
 spikeStruct.spikeTemplates = spikeTemplates;
 spikeStruct.clu = clu;
 spikeStruct.tempScalingAmps = tempScalingAmps;
 spikeStruct.cgs = cgs;
 spikeStruct.cids = cids;
+spikeStruct.channels = channels;
 spikeStruct.xcoords = xcoords;
 spikeStruct.ycoords = ycoords;
 spikeStruct.temps = temps;

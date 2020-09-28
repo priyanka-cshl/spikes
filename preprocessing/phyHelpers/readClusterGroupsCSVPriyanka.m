@@ -1,6 +1,6 @@
 
 
-function [cids, cgs] = readClusterGroupsCSV(filename)
+function [cids, cgs, wires] = readClusterGroupsCSVPriyanka(filename)
 %function [cids, cgs] = readClusterGroupsCSV(filename)
 % cids is length nClusters, the cluster ID numbers
 % cgs is length nClusters, the "cluster group":
@@ -25,3 +25,15 @@ cgs = zeros(size(cids));
 cgs(isMUA) = 1;
 cgs(isGood) = 2;
 cgs(isUns) = 3;
+
+% also read which wire it was strongest on
+fid = fopen(regexprep(filename,'_group','_info'));
+
+
+formatSpec = '%s';
+N = 8;
+headers = textscan(fid,formatSpec,N);
+
+foo = textscan(fid,'%f %f %f %*[^\n]');
+wires = [cell2mat(foo(1)) cell2mat(foo(3))];
+fclose(fid);

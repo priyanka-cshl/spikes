@@ -12,15 +12,15 @@
 
 %% add the repositories to your path
 
-addpath(genpath('C:\...\github\spikes'))
-addpath(genpath('C:\...\github\npy-matlab'))
+addpath(genpath('/home/pgupta/Desktop/Code/spikes'))
+addpath(genpath('/home/pgupta/Desktop/Code/npy-matlab'))
 
 
 %% set paths for where to find your data
 
-myKsDir = 'C:\...\data\myKilosortOutputDirectory';
+myKsDir = '/mnt/data/N8/2019-01-26_19-24-28'; %'C:\...\data\myKilosortOutputDirectory';
 
-myEventTimes = load('C:\...\data\someEventTimes.mat'); % a vector of times in seconds of some event to align to
+%myEventTimes = load('C:\...\data\someEventTimes.mat'); % a vector of times in seconds of some event to align to
 
 %% Loading data from kilosort/phy easily
 
@@ -112,7 +112,7 @@ psthViewer(sp.st, sp.clu, eventTimes, window, trialGroups);
 
 %% PSTHs across depth
 
-depthBinSize = 80; % in units of the channel coordinates, in this case µm
+depthBinSize = 80; % in units of the channel coordinates, in this case ï¿½m
 timeBinSize = 0.01; % seconds
 bslWin = [-0.2 -0.05]; % window in which to compute "baseline" rates for normalization
 psthType = 'norm'; % show the normalized version

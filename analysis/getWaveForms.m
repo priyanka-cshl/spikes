@@ -45,16 +45,17 @@ waveForms = nan(numUnits,gwfparams.nWf,nChInMap,wfNSamples);
 waveFormsMean = nan(numUnits,nChInMap,wfNSamples);
 for curUnitInd=1:numUnits
     curUnitID = unitIDs(curUnitInd);
-    curSpikeTimes = gwfparams.spikeTimes(gwfparams.spikeClusters==curUnitID);
+    curSpikeTimes = round(gwfparams.spikeTimes(gwfparams.spikeClusters==curUnitID)); % added round
     curUnitnSpikes = size(curSpikeTimes,1);
-    spikeTimesRP = curSpikeTimes(randperm(curUnitnSpikes));
+    %spikeTimesRP = curSpikeTimes(randperm(curUnitnSpikes));
+    spikeTimesRP = curSpikeTimes(1:curUnitnSpikes);
     spikeTimeKeeps(curUnitInd,1:min([gwfparams.nWf curUnitnSpikes])) = sort(spikeTimesRP(1:min([gwfparams.nWf curUnitnSpikes])));
     for curSpikeTime = 1:min([gwfparams.nWf curUnitnSpikes])
         tmpWf = mmf.Data.x(1:gwfparams.nCh,spikeTimeKeeps(curUnitInd,curSpikeTime)+gwfparams.wfWin(1):spikeTimeKeeps(curUnitInd,curSpikeTime)+gwfparams.wfWin(end));
         waveForms(curUnitInd,curSpikeTime,:,:) = tmpWf(chMap,:);
     end
     waveFormsMean(curUnitInd,:,:) = squeeze(nanmean(waveForms(curUnitInd,:,:,:),2));
-    disp(['Completed ' int2str(curUnitInd) ' units of ' int2str(numUnits) '.']);
+    %disp(['Completed ' int2str(curUnitInd) ' units of ' int2str(numUnits) '.']);
 end
 
 % Package in wf struct
